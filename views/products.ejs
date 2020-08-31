@@ -3,7 +3,7 @@
     <p><%= product.name %></p>
 
 
-    <a href="">Link</a>
+    <a href="<%=`/products/product/${product._id}`%>">Link</a>
     <img src="<%= product.picture %>" alt="" style="width: 80px">
     <p><%= product._id %></p>
     <!-- <a class="button" href="<%= `/products/${product._id}/delete?_method=DELETE` %>"
