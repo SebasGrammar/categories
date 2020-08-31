@@ -47,19 +47,25 @@ Product.deleteMany({})
 
 Product.create({
     name: "Bomba",
-    picture: "images/catalog/pump.jpg",
+    picture: "/images/catalog/pump.jpg",
+    tag: "pump"
+})
+
+Product.create({
+    name: "Bomba 2",
+    picture: "/images/catalog/test.jpg",
     tag: "pump"
 })
 
 Product.create({
     name: "Bomba",
-    picture: "images/catalog/pump.jpg",
+    picture: "/images/catalog/pump.jpg",
     tag: "motor"
 })
 
 Product.create({
     name: "Motorreductor",
-    picture: "images/catalog/pump.jpg",
+    picture: "/images/catalog/pump.jpg",
     tag: "motor_reducer"
 })
 
@@ -103,13 +109,14 @@ app.get("/products", function(req, res) {
             })
         })
         .catch(error => {
-            console.log(`Error fetching users: ${error.message}`)
+            console.log(`Error fetching products: ${error.message}`)
             res.redirect("/");
         });
 })
 
 app.get("/products/:tag", function (req, res) {
     let tag = req.params.tag;
+    console.log(`TAG: ${tag}`)
     Product.find({tag})
         .then(category => {
             res.render("../views/category", {
@@ -117,7 +124,7 @@ app.get("/products/:tag", function (req, res) {
             })
         })
         .catch(error => {
-            console.log(`Error fetching users: ${error.message}`)
+            console.log(`Error fetching products: ${error.message}`)
             res.redirect("/");
         });
 })
