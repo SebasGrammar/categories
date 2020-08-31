@@ -120,7 +120,8 @@ app.get("/products", function (req, res) {
         });
 })
 
-app.get("/products/product/:id", function (req, res, next) {
+// app.get("/products/product/:id", function (req, res, next) {
+app.get("/products/:id", function (req, res, next) {
     let productId = req.params.id;
     Product.findById(productId)
         .then(product => {
