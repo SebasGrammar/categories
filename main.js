@@ -101,7 +101,7 @@ app.get("/", function (req, res) {
 //         });
 // })
 
-app.get("/products", function(req, res) {
+app.get("/products", function (req, res) {
     Product.find({})
         .then(products => {
             res.render("../views/products", {
@@ -114,10 +114,87 @@ app.get("/products", function(req, res) {
         });
 })
 
+app.get("/products/product/:id", function (req, res, next) {
+    let productId = req.params.id;
+    Product.findById(productId)
+        .then(product => {
+            console.log(`Found it: ${productId}`)
+            res.locals.product = product;
+            next();
+        })
+        .catch(error => {
+            console.log(`Error fetching user by ID: ${error.message}`);
+            next(error);
+        });
+}, function (req, res) {
+    res.render("products/show");
+})
+
+/*********************************************************************/
+
+app.get("/products/add", function (req, res) {
+    console.log("OSOJDAPSDfffffffffff")
+    res.render("products/create")
+})
+
+function getParams(body) {
+
+    return {
+
+        name: body.name,
+        picture: body.picture,
+        tag: body.tag
+
+    }
+
+}
+
+function remove(req, res, next) {
+    let productId = req.params.id;
+    // Product.findByIdAndRemove(productId)
+    Product.findById(productId)
+        .then(() => {
+            console.log(`Found it: ${productId}`)
+            res.locals.redirect = "/products";
+            next();
+        })
+        .catch(error => {
+            console.log(`Error deleting product by ID: ${error.message}`);
+            next();
+        });
+}
+
+app.post("/products/create", function (req, res, next) {
+    let params = getParams(req.body);
+    console.log(params)
+    Product.create(params)
+        .then(course => {
+            res.locals.redirect = "/products";
+            res.locals.course = course;
+            next();
+        })
+        .catch(error => {
+            console.log(`Error saving course: ${error.message}`);
+            next(error);
+        });
+}, function (req, res, next) {
+    let redirectPath = res.locals.redirect;
+    if (redirectPath !== undefined) res.redirect(redirectPath);
+    else next();
+})
+
+app.delete("/products/:id/delete", remove, function (req, res, next) {
+    let redirectPath = res.locals.redirect;
+    if (redirectPath !== undefined) res.redirect(redirectPath);
+    else next();
+})
+
+/*************************************************************************/
+
 app.get("/products/:tag", function (req, res) {
     let tag = req.params.tag;
     console.log(`TAG: ${tag}`)
-    Product.find({tag})
+    Product.find({ tag })
         .then(category => {
             res.render("../views/category", {
                 category
@@ -130,6 +207,8 @@ app.get("/products/:tag", function (req, res) {
 })
 
 /*************************************************************************/
+
+
 
 //app.get("/products", homeController.products)
 
