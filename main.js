@@ -35,6 +35,12 @@ app.use(
     })
 );
 
+app.use(
+    methodOverride("_method", {
+        methods: ["POST", "GET"]
+    })
+);
+
 app.use(express.json());
 
 //app.get("/", homeController.index);
@@ -118,7 +124,7 @@ app.get("/products/product/:id", function (req, res, next) {
     let productId = req.params.id;
     Product.findById(productId)
         .then(product => {
-            console.log(`Found it: ${productId}`)
+            console.log(`This is it: ${productId}`)
             res.locals.product = product;
             next();
         })
@@ -149,21 +155,6 @@ function getParams(body) {
 
 }
 
-function remove(req, res, next) {
-    let productId = req.params.id;
-    // Product.findByIdAndRemove(productId)
-    Product.findById(productId)
-        .then(() => {
-            console.log(`Found it: ${productId}`)
-            res.locals.redirect = "/products";
-            next();
-        })
-        .catch(error => {
-            console.log(`Error deleting product by ID: ${error.message}`);
-            next();
-        });
-}
-
 app.post("/products/create", function (req, res, next) {
     let params = getParams(req.body);
     console.log(params)
@@ -183,7 +174,62 @@ app.post("/products/create", function (req, res, next) {
     else next();
 })
 
-app.delete("/products/:id/delete", remove, function (req, res, next) {
+// app.delete("/products/:id/delete", function (req, res, next) {
+//     let productId = req.params.id;
+//     Product.findByIdAndRemove(productId)
+//         .then(() => {
+//             console.log(`Found it: ${productId}`)
+//             res.locals.redirect = "/products";
+//             next();
+//         })
+//         .catch(error => {
+//             console.log("SHIT")
+//             console.log(`Error deleting product by ID: ${error.message}`);
+//             next();
+//         });
+// }, function (req, res, next) {
+//     let redirectPath = res.locals.redirect;
+//     if (redirectPath !== undefined) res.redirect(redirectPath);
+//     else next();
+// })
+
+// app.get("/products/:id", function (req, res, next) {
+//     let productId = req.params.id;
+//     Product.findByIdAndDelete(productId)
+//         .then((product) => {
+//             console.log("YUJS")
+//             console.log(product)
+//             console.log(`Found it: ${productId}`)
+//             res.locals.redirect = "/products";
+//             next();
+//         })
+//         .catch(error => {
+//             console.log("SHIT")
+//             console.log(`Error deleting product by ID: ${error.message}`);
+//             next();
+//         });
+// }, function (req, res, next) {
+//     let redirectPath = res.locals.redirect;
+//     if (redirectPath !== undefined) res.redirect(redirectPath);
+//     else next();
+// })
+
+app.delete("/products/:id/delete", function (req, res, next) {
+    let productId = req.params.id;
+    Product.findByIdAndDelete(productId)
+        .then(() => {
+            // console.log("YUJS")
+            // console.log(product)
+            // console.log(`Found it: ${productId}`)
+            res.locals.redirect = "/products";
+            next();
+        })
+        .catch(error => {
+            console.log("SHIT")
+            console.log(`Error deleting product by ID: ${error.message}`);
+            next();
+        });
+}, function (req, res, next) {
     let redirectPath = res.locals.redirect;
     if (redirectPath !== undefined) res.redirect(redirectPath);
     else next();
