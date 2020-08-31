@@ -120,8 +120,23 @@ app.get("/products", function (req, res) {
         });
 })
 
+app.get("/products/:tag", function (req, res) {
+    let tag = req.params.tag;
+    console.log(`TAG: ${tag}`)
+    Product.find({ tag })
+        .then(category => {
+            res.render("../views/category", {
+                category
+            })
+        })
+        .catch(error => {
+            console.log(`Error fetching products: ${error.message}`)
+            res.redirect("/");
+        });
+})
+
 // app.get("/products/product/:id", function (req, res, next) {
-app.get("/products/:id", function (req, res, next) {
+app.get("/products/product/:id", function (req, res, next) {
     let productId = req.params.id;
     Product.findById(productId)
         .then(product => {
@@ -236,22 +251,65 @@ app.delete("/products/:id/delete", function (req, res, next) {
     else next();
 })
 
-/*************************************************************************/
+/* EDIT */
 
-app.get("/products/:tag", function (req, res) {
-    let tag = req.params.tag;
-    console.log(`TAG: ${tag}`)
-    Product.find({ tag })
-        .then(category => {
-            res.render("../views/category", {
-                category
-            })
+app.get("/products/:id/edit", function (req, res, next) {
+    let productId = req.params.id;
+    Product.findById(productId)
+        .then(product => {
+            res.render("products/edit", {
+                product
+            });
         })
         .catch(error => {
-            console.log(`Error fetching products: ${error.message}`)
-            res.redirect("/");
+            console.log(`Error fetching user by ID: ${error.message}`);
+            next(error);
         });
 })
+
+app.put("/products/:id/update", function (req, res, next) {
+    let productId = req.params.id,
+        productParams = {
+            name: req.body.name,
+            picture: req.body.picture,
+            tag: req.body.tag
+
+        };
+    Product.findByIdAndUpdate(productId, {
+        $set: productParams
+    })
+        .then(product => {
+            res.locals.redirect = `/products/product/${productId}`;
+            res.locals.product = product;
+            next();
+        })
+        .catch(error => {
+            console.log(`Error updating product by ID: ${error.message}`);
+            next(error);
+        });
+}, function (req, res, next) {
+    let redirectPath = res.locals.redirect;
+    if (redirectPath !== undefined) res.redirect(redirectPath);
+    else next();
+})
+
+
+/*************************************************************************/
+
+// app.get("/products/:tag", function (req, res) {
+//     let tag = req.params.tag;
+//     console.log(`TAG: ${tag}`)
+//     Product.find({ tag })
+//         .then(category => {
+//             res.render("../views/category", {
+//                 category
+//             })
+//         })
+//         .catch(error => {
+//             console.log(`Error fetching products: ${error.message}`)
+//             res.redirect("/");
+//         });
+// })
 
 /*************************************************************************/
 

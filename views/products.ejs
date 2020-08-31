@@ -4,12 +4,17 @@
 
 
     <!-- <a href="<%=`/products/product/${product._id}`%>">Link</a> -->
-    <a href="<%=`/products/${product._id}`%>">Link</a>
+    <!-- <a href="<%=`/products/${product._id}`%>">Link</a> -->
+    <a href="<%=`/products/product/${product._id}`%>">Link</a>
     <img src="<%= product.picture %>" alt="" style="width: 80px">
     <p><%= product._id %></p>
 
     <!-- <a class="button" href="<%= `/products/product/${product._id}/delete?_method=DELETE` %>"
         onclick="return confirm('Are you sure you want to delete this record?')">Borrar</a> -->
+
+    <a class="button" href="<%=`/products/${product._id}/edit`%>">
+        Editar producto
+    </a>
 
     <a class="button" href="<%= `/products/${product._id}/delete?_method=DELETE` %>"
         onclick="return confirm('Are you sure you want to delete this record?')">Borrar</a>
