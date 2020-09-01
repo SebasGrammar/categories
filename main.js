@@ -120,6 +120,11 @@ app.get("/products", function (req, res) {
         });
 })
 
+app.get("/products/add", function (req, res) {
+    console.log("OSOJDAPSDfffffffffff")
+    res.render("products/create")
+})
+
 app.get("/products/:tag", function (req, res) {
     let tag = req.params.tag;
     console.log(`TAG: ${tag}`)
@@ -154,10 +159,10 @@ app.get("/products/product/:id", function (req, res, next) {
 
 /*********************************************************************/
 
-app.get("/products/add", function (req, res) {
-    console.log("OSOJDAPSDfffffffffff")
-    res.render("products/create")
-})
+// app.get("/products/add", function (req, res) {
+//     console.log("OSOJDAPSDfffffffffff")
+//     res.render("products/create")
+// })
 
 function getParams(body) {
 

@@ -5,3 +5,8 @@ body {
 h1 {
     background: green !important;
 }
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 4fr;
+}
